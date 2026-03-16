@@ -14,7 +14,6 @@ export function ProjectForm({headline} : {headline: string}) {
     const [project, setProject] = useState<Project>();
 
     const getProject = async (id: number) => {
-
         try {
             const myProject = projectsData.find((item) => item.id === id);
             setProject(myProject);
