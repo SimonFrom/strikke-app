@@ -23,7 +23,7 @@ export function ProjectForm({headline} : {headline: string}) {
                 variant={'destructive'}
                 size={'icon'}
                 icon={X}
-                style={{marginLeft: '80%'}}
+                style={{marginLeft: '81%'}}
                 onPress={() => router.push('/')}></Button>
             <GroupedInput title={headLine}>
                 <GroupedInputItem
