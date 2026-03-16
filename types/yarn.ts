@@ -1,6 +1,7 @@
 export type Yarn = {
     id: number,
-    name: string;
+    make: string;
+    model: string;
     type: string;
     color: string;
     amount: number;

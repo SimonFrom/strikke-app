@@ -11,6 +11,7 @@ export type Project = {
     washingRec: string;
     needles: Needles;
     category: string[];
+    notes: string;
 }
 
 export const projectsData: Project[] = [
@@ -21,7 +22,8 @@ export const projectsData: Project[] = [
         recipe: "https://hobbii.dk/collections/free-patterns/products/hp-dntd5p-yarn-yolk-placemat",
         materials: {
             id: 1,
-            name: "Drops Alaska",
+            make: "Drops",
+            model: "Alaske",
             type: "Uldgarn",
             color: "Mørkeblå",
             amount: 150,
@@ -35,6 +37,7 @@ export const projectsData: Project[] = [
             diameter: 5,
         },
         category: ["hue", "vinter", "begynder"],
+        notes: "Hello"
     },
     {
         id: 2,
@@ -43,7 +46,8 @@ export const projectsData: Project[] = [
         recipe: "https://hobbii.dk/collections/free-patterns/products/hp-dntd5p-yarn-yolk-placemat",
         materials: {
             id: 2,
-            name: "Sandnes Tynn Merino Ulltwist",
+            make: "Sandnes",
+            model: "Tynn Merino Ulltwist",
             type: "Merinould",
             color: "Cremehvid",
             amount: 400,
@@ -57,6 +61,7 @@ export const projectsData: Project[] = [
             diameter: 3.5,
         },
         category: ["sweater", "mellem", "merino"],
+        notes: "Hello"
     },
     {
         id: 3,
@@ -65,7 +70,8 @@ export const projectsData: Project[] = [
         recipe: "https://hobbii.dk/collections/free-patterns/products/hp-dntd5p-yarn-yolk-placemat",
         materials: {
             id: 3,
-            name: "Drops Safran",
+            make: "Drops",
+            model: "Safran",
             type: "Bomuldsgarn",
             color: "Støvet rosa",
             amount: 200,
@@ -79,5 +85,6 @@ export const projectsData: Project[] = [
             diameter: 3,
         },
         category: ["top", "sommer", "bomuld"],
+        notes: "Hello"
     },
 ];

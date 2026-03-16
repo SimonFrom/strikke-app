@@ -28,6 +28,7 @@ export default function HomeScreen() {
     }
 
 
+    // @ts-ignore
     return (
         <KeyboardAvoidingView
             style={{flex: 1}}
