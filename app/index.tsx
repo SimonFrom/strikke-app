@@ -9,6 +9,7 @@ import {SafeAreaView} from "react-native-safe-area-context";
 import {useEffect, useState} from "react";
 import {PlusIcon} from "lucide-react-native";
 import {Router, useRouter} from "expo-router";
+import {supabase} from "@/utils/supabase";
 
 
 export default function HomeScreen() {
@@ -17,18 +18,36 @@ export default function HomeScreen() {
 
     // Search bar
     const [searchQuery, setSearchQuery] = useState('');
-    const [filteredProjects, setFilteredProjects] = useState<Project[]>(projectsData);
+    const [projects, setProjects] = useState<Project[]>([]);
+    const [filteredProjects, setFilteredProjects] = useState<Project[]>([]);
     const handleSearch = (query: string) => {
         setSearchQuery(query);
-        const filtered = projectsData.filter((project: Project) =>
+        const filtered = projects.filter((project: Project) =>
 
             project.headline.toLowerCase().includes(query.toLowerCase())
         );
         setFilteredProjects(filtered);
     }
+    useEffect(() => {
+        getProjects();
+    }, []);
+
+    const getProjects = async () => {
+        const {data, error} = await supabase
+            .from("projects")
+            .select('*')
+
+        console.log('data:', data)
+        console.log('error:', error)
+
+        if (error) return error;
+        if (data) {
+            setFilteredProjects(data);
+            setProjects(data);
+        }
+    }
 
 
-    // @ts-ignore
     return (
         <KeyboardAvoidingView
             style={{flex: 1}}
@@ -48,7 +67,10 @@ export default function HomeScreen() {
                         size={"icon"}
                         icon={PlusIcon}
                         animation={true}
-                        onPress={() => router.push({ pathname: '/projects/[id]', params: { headline: 'Opret et nyt projekt' } })}></Button>
+                        onPress={() => router.push({
+                            pathname: '/projects/[id]',
+                            params: {headline: 'Opret et nyt projekt'}
+                        })}></Button>
                 </View>
             </SafeAreaView>
         </KeyboardAvoidingView>
