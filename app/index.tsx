@@ -3,7 +3,7 @@ import {View} from '@/components/ui/view';
 import {Button} from '@/components/ui/button';
 import {SearchBar} from "@/components/ui/searchbar";
 import {KeyboardAvoidingView, Platform, StyleSheet} from 'react-native';
-import {Project, projectsData} from "@/types/project";
+import {Project} from "@/types/project";
 import {ProjectCard} from "@/components/ui/ProjectCard";
 import {SafeAreaView} from "react-native-safe-area-context";
 import {useEffect, useState} from "react";
@@ -47,6 +47,10 @@ export default function HomeScreen() {
         }
     }
 
+    const updateList = async (id: number) => {
+        setFilteredProjects(prev => prev.filter(p => p.id !== id));
+    }
+
 
     return (
         <KeyboardAvoidingView
@@ -54,7 +58,7 @@ export default function HomeScreen() {
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
             <SafeAreaView style={{flex: 1, padding: 24, gap: 16}}>
                 <Text variant={"heading"}>Strikke Appen</Text>
-                <ProjectCard projects={filteredProjects}></ProjectCard>
+                <ProjectCard projects={filteredProjects} onDelete={updateList}></ProjectCard>
                 <View style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>
                     <SearchBar
                         onChangeText={setSearchQuery}
@@ -69,7 +73,7 @@ export default function HomeScreen() {
                         animation={true}
                         onPress={() => router.push({
                             pathname: '/projects/[id]',
-                            params: {headline: 'Opret et nyt projekt'}
+                            params: {id: 'new', headline: 'Opret et nyt projekt'}
                         })}></Button>
                 </View>
             </SafeAreaView>

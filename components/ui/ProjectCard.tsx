@@ -4,11 +4,13 @@ import {FlatList, Linking, StyleSheet, Image, Pressable} from "react-native";
 import {Text} from '@/components/ui/text';
 import {View} from '@/components/ui/view'
 import {Button} from '@/components/ui/button'
+import ModalComponent from '@/components/ui/Modal'
+
 
 import {Route, router} from "expo-router";
 
 
-export function ProjectCard({projects}: { projects: Project[] }) {
+export function ProjectCard({projects, onDelete}: { projects: Project[]; onDelete: (id: number) => void }) {
 
     // Nav
     const showProject = (id: number) => {
@@ -22,6 +24,7 @@ export function ProjectCard({projects}: { projects: Project[] }) {
     }
 
     return (
+
         <FlatList
             data={projects}
             keyExtractor={(item) => item.id.toString()}
@@ -45,6 +48,7 @@ export function ProjectCard({projects}: { projects: Project[] }) {
                             }}>
                                 <Text onPress={() => Linking.openURL(item.recipe)}>Opskrift</Text>
                             </Button>
+                            <ModalComponent id={item.id} onDelete={onDelete}></ModalComponent>
                             <View style={{flexDirection: 'row', gap: 8}}>
                                 {item.category?.map((cat) => (
                                     <Text key={cat}>#{cat}</Text>
@@ -55,6 +59,7 @@ export function ProjectCard({projects}: { projects: Project[] }) {
                 </Card>
             )}
         />
+
     );
 }
 
