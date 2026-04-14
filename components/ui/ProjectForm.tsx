@@ -1,13 +1,14 @@
 import {GroupedInput, GroupedInputItem} from '@/components/ui/input';
 import {Button} from '@/components/ui/button';
 import {Pencil, BookOpen, Terminal, Layers, Shirt, Tag, X, Image} from 'lucide-react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {KeyboardAvoidingView, Platform, ScrollView, StyleSheet} from 'react-native';
 import {SafeAreaView} from "react-native-safe-area-context";
 import {Route, useLocalSearchParams, useRouter} from "expo-router"
 import {Project} from '../../types/project';
 import {supabase} from "@/utils/supabase";
 import {Camera} from '@/components/ui/camera';
+import { Image as RNImage } from 'react-native';
 
 
 import {Text} from "@/components/ui/text";
@@ -17,6 +18,9 @@ export function ProjectForm({headline}: { headline: string }) {
     const {id} = useLocalSearchParams()
     const isEditing = !!id && id !== 'new'
     const [isCameraOpen, setCameraOpen] = useState(false)
+    const scrollViewRef = useRef<ScrollView>(null);
+    const [cameraY, setCameraY] = useState(0);
+    const [previewUri, setPreviewUri] = useState<string | null>(null);
     const headLine = headline ?? "Opret et nyt projekt"
     const [project, setProject] = useState<Project | null>(null);
     const [form, setForm] = useState({
@@ -58,6 +62,11 @@ export function ProjectForm({headline}: { headline: string }) {
 
     const handleCapture = async (uri: string) => {
         const fileName = `${Date.now()}.jpg`
+        setCameraOpen(true);
+        setPreviewUri(uri);
+        setTimeout(() => {
+            scrollViewRef.current?.scrollTo({ y: cameraY, animated: true });
+        }, 100);
 
 
         const formData = new FormData()
@@ -110,6 +119,7 @@ export function ProjectForm({headline}: { headline: string }) {
                 needles: data.needles,
                 materials: data.materials,
             })
+            setPreviewUri(data.photo)
         }
     }
 
@@ -189,7 +199,7 @@ export function ProjectForm({headline}: { headline: string }) {
         <KeyboardAvoidingView style={{flex: 1}}
                               behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
             <SafeAreaView style={{flex: 1, padding: 24, gap: 16}}>
-                <ScrollView style={{flex: 1, marginBottom: 4}}>
+                <ScrollView style={{flex: 1, marginBottom: 4}} onLayout={(e) => setCameraY(e.nativeEvent.layout.y)}>
                     <Button
                         variant={'destructive'}
                         size={'icon'}
@@ -287,11 +297,20 @@ export function ProjectForm({headline}: { headline: string }) {
                             //         <Text key={cat}>#{cat}</Text>
                             //     ))}
                         />
+                        {!previewUri &&
                         <Button
                             icon={Image}
                             onPress={() => setCameraOpen(!isCameraOpen)}>
                             <Text>Tag et billede af dit projekt</Text>
                         </Button>
+                        }
+                        {previewUri && (
+                            <RNImage
+                                source={{ uri: previewUri }}
+                                style={{ width: '100%', height: 200, borderRadius: 8, marginTop: 8 }}
+                                resizeMode="cover"
+                            />
+                        )}
                         {isCameraOpen && (
                             <Camera
                                 onCapture={({uri}) => handleCapture(uri)}
